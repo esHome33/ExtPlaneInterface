@@ -173,7 +173,7 @@ Setting dataRef values, pressing a button or a key are messages send to [ExtPlan
    // Press a key
    iface.sendMessage(new KeyCommand(keyId));
    ```
-List of key and button id's can be found at: http://www.xsquawkbox.net/xpsdk/mediawiki/XPLMUtilities Note that the key and button id's are numbers, not names. X-Plane does not provide a way to lookup keys or buttons by name.
+List of key and button id's can be found at: http://www.xsquawkbox.net/xpsdk/mediawiki/XPLMUtilities Note that the key and button id's are numbers, not names. X-Plane does not provide a way to lookup keys or buttons by name. More recently, XPlane Command Management evolved : see [https://developer.x-plane.com/sdk/XPLMUtilities/#X-PLANE_COMMAND_MANAGEMENT].
     
 [ExtPlane-Plugin]:https://github.com/vranki/ExtPlane/blob/master/README.md
 [X-Plane]:http://www.x-plane.com/      
