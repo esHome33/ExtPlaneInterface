@@ -23,9 +23,9 @@ package org.cutre.soft.epi.command;
  */
 public class ButtonCommand implements CommandMessage {
     
-    private static final String BUTTON_PREFIX = "button";
+    private static final String BUTTON_PREFIX = "but";
     
-    private static final String RELEASE_PREFIX = "release";
+    private static final String RELEASE_PREFIX = "rel";
     
     public static enum ButtonAction {
         PRESS,
