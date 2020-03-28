@@ -139,7 +139,7 @@ iface.setDataRefValue(engintThrottleDataRefName, new String[] {"1.0", "1.0", "1.
 
 Setting dataRef values, pressing a button or a key are messages send to [ExtPlane-Plugin].
 
-   - `org.cutre.soft.epi.command.ButtonCommand`: allow pushing/releasing a sim button,
+   - `org.cutre.soft.epi.command.ButtonCommand`: allow pushing/releasing a sim button (joystick),
    
    ```java
    // Push a button
@@ -148,7 +148,7 @@ Setting dataRef values, pressing a button or a key are messages send to [ExtPlan
    // Release a button
    iface.sendMessage(new ButtonCommand(ButtonCommand.ButtonAction.RELEASE, buttonId));
    ```
-   - `org.cutre.soft.epi.command.DataRefCommand`: allows sending a DataRef message to the plug-in:
+   - `org.cutre.soft.epi.command.DataRefCommand`: allows sending a DataRef message to the plug-in,
    
    ```java
    // Subscribe to a dataRef
@@ -167,13 +167,25 @@ Setting dataRef values, pressing a button or a key are messages send to [ExtPlan
    iface.sendMessage(new ExtPlaneCommand(ExtPlaneCommand.EXTPLANE_SETTING.UPDATE_INTERVAL, interval));
    ```
    
-   - `org.cutre.soft.epi.command.KeyCommand`: send a key press to the a sim,
+   - `org.cutre.soft.epi.command.KeyCommand`: send a key press to the sim,
    
    ```java
    // Press a key
    iface.sendMessage(new KeyCommand(keyId));
    ```
+   
+   - `org.cutre.soft.epi.command.CmdCommand`: send a command to [X-Plane] via [ExtPlane-Plugin],
+   
+   ```java
+   // create a new CmdCommand that sets the autopilot on
+   CmdCommand myMessage = new CmdCommand(CmdCommand.SUBCOMMAND.ONCE, "sim/autopilot/servos_on");
+   iface.sendMessage(myMessage);
+   ```
+   
+   
 List of key and button id's can be found at: http://www.xsquawkbox.net/xpsdk/mediawiki/XPLMUtilities Note that the key and button id's are numbers, not names. X-Plane does not provide a way to lookup keys or buttons by name. More recently, XPlane Command Management evolved : see [https://developer.x-plane.com/sdk/XPLMUtilities/#X-PLANE_COMMAND_MANAGEMENT].
+
+You can also find two files containing all the datarefs and all the commands in your X-Plane installation directory : look at <code>Commands.txt</code> and <code>DataRefs.txt</code> in <code>XP installation directory/Resources/plugins/</code> folder.
     
 [ExtPlane-Plugin]:https://github.com/vranki/ExtPlane/blob/master/README.md
 [X-Plane]:http://www.x-plane.com/      
