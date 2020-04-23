@@ -2,7 +2,6 @@ package org.cutre.soft.epi.communication;
 
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 import org.cutre.soft.epi.data.DataRef;
 import org.cutre.soft.epi.data.DataRefFactory;
 import org.cutre.soft.epi.data.DataRefRepository;
@@ -29,7 +28,7 @@ import org.cutre.soft.epi.util.ObservableAware;
  */
 public class InputHandler implements Runnable {
 
-    private static final Logger LOGGER = Logger.getLogger(InputHandler.class);
+    //private static final Logger LOGGER = Logger.getLogger(InputHandler.class);
     private static final String DATA_REF_PATTERN = "^u(i|f|d|ia|fa|b)\\s.+";
     private static final String VERSION_PATTERN = "^EXTPLANE\\s.*";
     
@@ -42,13 +41,18 @@ public class InputHandler implements Runnable {
     InputHandler(DataRefRepository repository, String data) {
         this.data = data;
         this.repository = repository;
+        
+		//LOGGER.addAppender(new ConsoleAppender(ExtPlaneInterface.LOGGER_LAYOUT));
+		
     }
 
     public void run() {
 
         if(isDataRef(data)) {
             
-            DataRefFactory drf = new DataRefFactory(data);
+        	//Thread.currentThread().setName("InpHdlr");
+            
+        	DataRefFactory drf = new DataRefFactory(data);
             
             dataRef = repository.getDataRef(drf.getDataRefName());
             dataRef = drf.getInstance(dataRef);
@@ -56,19 +60,27 @@ public class InputHandler implements Runnable {
             
             ObservableAware.getInstance().update(dataRef);
             
-            LOGGER.debug(dataRef);
+            //LOGGER.debug(dataRef);
             
         } else if(isVersion(data)) {
-            LOGGER.info("Version " + data.replace("EXTPLANE ", ""));
+            //LOGGER.info("Version " + data.replace("EXTPLANE ", ""));
         }
         
     }
     
     private boolean isDataRef(String data) {
-        return Pattern.matches(InputHandler.DATA_REF_PATTERN, data);
+    	if(data != null) {
+    		return Pattern.matches(InputHandler.DATA_REF_PATTERN, data);
+    	} else {
+    		return false;
+    	}
     }
     
     private boolean isVersion(String data) {
-        return Pattern.matches(InputHandler.VERSION_PATTERN, data);
+    	if(data != null) {
+    		return Pattern.matches(InputHandler.VERSION_PATTERN, data);
+    	} else {
+    		return false;
+    	}
     }
 }

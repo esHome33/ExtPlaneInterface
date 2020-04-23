@@ -1,6 +1,7 @@
 package org.cutre.soft;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -55,8 +56,13 @@ public class ExtPlaneInterface {
     private int port;
     private int poolSize = 2;
     
+    //public static final PatternLayout LOGGER_LAYOUT = new PatternLayout("%d{ISO8601} [%t] %-5p %c %x - %m%n");
     
     public ExtPlaneInterface(String server, int port) {
+    	
+    	//PropertyConfigurator.configure("log4j.properties");
+    	//LOGGER.addAppender(new ConsoleAppender(LOGGER_LAYOUT));
+    	//LOGGER.info("Log4j correctly configured !");
         
         this.server = server;
         this.port = port;
@@ -187,5 +193,55 @@ public class ExtPlaneInterface {
         
         this.sender = null;
     }
-
+    
+    /**
+     * Checking if XPlane is running or not. This function doesn't work because a broken socket 
+     * doesn't make any change in the runnables "sender" and "receive"
+     * 
+     * @return true or false if one of receiver or sender is down.
+     */
+/*    private boolean isAlive() {
+    	if(this.sender.isAlive() && receive.isAlive()) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+*/
+    
+    
+    /**
+     * Checking if XPlane is running or down : with this function, applications that are using 
+     * ExtPlaneInterface can bail out properly in case XPlane has unexpectedly shut down. 
+     * Otherwise, this app will wait a long time and perhaps crash.
+     *
+     * This function uses the explanation about checking sockets in Java :
+     * https://stackoverflow.com/questions/17147352/checking-if-server-is-online-from-java-code
+     * 
+     * The check method : create a new socket between us and ExtPlane and wait enough for the 
+     * connection to achieve, in order to receive good news (or not) !
+     * 
+     * @param timout_duration 	timout duration in ms before an Exception is raised. Use 200 ms or a little more 
+     * 							it depends on your system and WiFi (be careful not to set too long !). 
+     * 							0 is immediate : your connexion will never be online because the connect 
+     * 							function cannot return something immediately !
+     * 
+     * @return true 			if XPlane is running, false if not.
+     */
+    public boolean isOnline(int timout_duration) {
+        boolean b = true;
+        try{
+            InetSocketAddress sa = new InetSocketAddress(server, port);
+            Socket ss = new Socket();
+            ss.connect(sa, timout_duration);  
+            ss.close();
+            sa = null;
+            ss = null;
+        }catch(Exception e) {
+        	//LOGGER.error("isOnline " + e.getMessage());
+            b = false;
+        }
+        return b;
+    }
+    
 }

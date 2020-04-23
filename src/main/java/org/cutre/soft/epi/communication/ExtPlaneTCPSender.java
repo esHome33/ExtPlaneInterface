@@ -3,7 +3,6 @@ package org.cutre.soft.epi.communication;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import org.apache.log4j.Logger;
 import org.cutre.soft.epi.command.CommandMessage;
 import org.cutre.soft.epi.data.MessageRepository;
 
@@ -28,7 +27,7 @@ import org.cutre.soft.epi.data.MessageRepository;
  */
 public class ExtPlaneTCPSender extends StoppableThread {
 
-    private static final Logger LOGGER = Logger.getLogger(ExtPlaneTCPSender.class);
+    //private static final Logger LOGGER = Logger.getLogger(ExtPlaneTCPSender.class);
     
     private Socket socket;
     private MessageRepository repository;
@@ -38,6 +37,8 @@ public class ExtPlaneTCPSender extends StoppableThread {
         this.repository = repository;
         this.keep_running = true;
         Thread.currentThread().setPriority(MIN_PRIORITY);
+        
+		//LOGGER.addAppender(new ConsoleAppender(ExtPlaneInterface.LOGGER_LAYOUT));
     }
 
     @Override
@@ -47,8 +48,8 @@ public class ExtPlaneTCPSender extends StoppableThread {
             String command = null;
             CommandMessage message = null;
             
-            this.setName("ExtPlane-SenderThread");            
-            LOGGER.debug("Running Thread " + this.getName());
+            this.setName("ExtPlaneSender");            
+            //LOGGER.debug("Running Thread " + this.getName());
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
             
             while(keep_running) {
@@ -56,7 +57,7 @@ public class ExtPlaneTCPSender extends StoppableThread {
                 if (message != null) {
                     command = message.getCommand();
                     
-                    LOGGER.debug("Sending message: " + command);
+                    //LOGGER.debug("Sending message: " + command);
                     writer.println(command);
                     writer.flush();
                     
@@ -68,7 +69,7 @@ public class ExtPlaneTCPSender extends StoppableThread {
             
 
         } catch (Exception e) {
-            LOGGER.error("ERROR sending data.", e);
+            //LOGGER.error("ERROR sending data.", e);
         } finally {
             
         }

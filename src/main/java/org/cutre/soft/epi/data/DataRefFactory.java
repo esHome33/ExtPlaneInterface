@@ -58,7 +58,7 @@ public class DataRefFactory {
         if(dataRef==null) {
             dataRef = dr;
         } else {
-            if(dr.getName().equals(dr.getName())) {
+            if(dataRef.getName().equals(dr.getName())) {
                 dataRef.setValue(dr.getValue());
                 dataRef.setRawData(rawData);
             }

@@ -29,6 +29,7 @@ public class DataRefRepositoryImpl implements DataRefRepository {
     private List<DataRef> dataRefList = new ArrayList<DataRef>();
     
     
+    
     public DataRef getDataRef(String dataRef) {
         return this.dataRefsMap.get(dataRef);
     }
@@ -47,14 +48,16 @@ public class DataRefRepositoryImpl implements DataRefRepository {
     public void removeDataRef(String dataRef) {
         DataRef dr = this.getDataRef(dataRef);
         if(dr!=null) {
-            this.dataRefsMap.remove(dr);
+            this.dataRefsMap.remove(dataRef);
             this.dataRefList.remove(dr);
         }
     }
 
     public void setDataRef(DataRef dataRef) {
         if(!this.dataRefsMap.containsKey(dataRef.getName())) {
-            this.dataRefList.add(dataRef);            
+        	synchronized (this) {
+        		this.dataRefList.add(dataRef);                    		
+        	}
         }
         this.dataRefsMap.put(dataRef.getName(), dataRef);
     }
